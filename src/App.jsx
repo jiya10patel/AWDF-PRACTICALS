@@ -1,17 +1,26 @@
+import { Routes, Route } from 'react-router-dom';
+
 import Header from './components/Header';
-import About from './components/About';
-import Skills from './components/Skills';
+import NavBar from './components/NavBar';
 import Footer from './components/Footer';
+import Home from './components/pages/Home';
+import Projects from './components/pages/Projects';
+import Contact from './components/pages/Contact';
+
 import './App.css';
 
 function App() {
-  const skillList = ['HTML', 'CSS', 'React', 'Node.js', 'Python', 'Networking', 'Cybersecurity essentials'];
-
   return (
     <div className="App">
       <Header name="Jiya" />
-      <About />
-      <Skills skillList={skillList} />
+      <NavBar />
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
+
       <Footer />
     </div>
   );
