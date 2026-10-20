@@ -5,6 +5,9 @@ require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
 const taskRoutes = require('./routes/taskRoutes');
+const aiRoutes = require('./routes/ai');
+
+
 const authMiddleware = require('./middleware/auth');
 const logger = require('./middleware/logger');
 const requireJsonContentType = require('./middleware/requireJsonContentType');
@@ -27,6 +30,7 @@ mongoose.connect(process.env.MONGO_URI)
 // Routes
 app.use('/auth', authRoutes);
 app.use('/tasks', authMiddleware, taskRoutes);
+app.use('/api/ai', authMiddleware, aiRoutes);
 
 // Global Error Handler (MUST be last)
 app.use(errorHandler);
