@@ -1,27 +1,52 @@
+import { useState, useEffect } from 'react';
+
 function Projects() {
-  const projectList = [
-    {
-      title: 'Student Portfolio using React',
-      desc: 'A personal portfolio site built with reusable React components and React Router.',
-    },
-    {
-      title: 'ThreatShield AI',
-      desc: 'An AI-powered unified threat detection and analysis platform built as a team SGP project.',
-    },
-    {
-      title: 'Cybersecurity Internship Tasks',
-      desc: 'Hands-on practicals covering Nmap scanning, firewall configuration, and traffic analysis using Wireshark.',
-    },
-  ];
+  const [repos, setRepos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchRepos = () => {
+    setLoading(true);
+    setError(null);
+    fetch('https://api.github.com/users/jiya10patel/repos')
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('User not found or API request failed');
+        }
+        return res.json();
+      })
+      .then((data) => setRepos(data))
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchRepos();
+  }, []);
+
+  if (loading) return <p className="status-msg">Loading repositories...</p>;
+
+  if (error) {
+    return (
+      <div className="status-msg error-msg">
+        <p>Error: {error}</p>
+        <button className="submit-btn" onClick={fetchRepos}>Retry</button>
+      </div>
+    );
+  }
 
   return (
     <section>
-      <h2>Projects</h2>
+      <h2>My GitHub Projects</h2>
       <ul>
-        {projectList.map((project) => (
-          <li key={project.title}>
-            <strong>{project.title}</strong>
-            <p>{project.desc}</p>
+        {repos.map((repo) => (
+          <li key={repo.id}>
+            <strong>{repo.name}</strong>
+            <p>
+              <a href={repo.html_url} target="_blank" rel="noreferrer">
+                View on GitHub
+              </a>
+            </p>
           </li>
         ))}
       </ul>
